@@ -56,6 +56,7 @@ body{
 h1{
  font-size:30px;
  margin-bottom:30px;
+ transition:.3s;
 }
 
 /* BUTTONS */
@@ -87,18 +88,19 @@ button{
  color:white;
 }
 
-/* floating hearts */
+/* 💖 BIG HEARTS */
 .heart{
  position:fixed;
  font-size:45px;
+ cursor:pointer;
  animation:floatUp linear forwards;
 }
 @keyframes floatUp{
- 0%{transform:translateY(100vh);opacity:1;}
- 100%{transform:translateY(-10vh);opacity:0;}
+ 0%{transform:translateY(100vh) scale(.8);opacity:1;}
+ 100%{transform:translateY(-10vh) scale(1.6);opacity:0;}
 }
 
-/* spark explosion */
+/* 💥 EXPLOSION */
 .spark{
  position:fixed;
  width:6px;
@@ -112,62 +114,7 @@ button{
  100%{transform:translate(var(--x),var(--y));opacity:0;}
 }
 
-/* ROCKET */
-.rocket{
- position:fixed;
- width:6px;
- height:20px;
- background:white;
- left:50%;
- bottom:-20px;
- transform:translateX(-50%);
- border-radius:3px;
- animation:fly 1s linear forwards;
-}
-@keyframes fly{
- 0%{bottom:-20px;}
- 100%{bottom:70vh;}
-}
-
-/* heart particles */
-.heartParticle{
- position:fixed;
- font-size:20px;
- animation:heartExplode 1.2s ease-out forwards;
-}
-@keyframes heartExplode{
- 0%{transform:translate(0,0) scale(.6);opacity:1;}
- 100%{transform:translate(var(--x),var(--y)) scale(1.6);opacity:0;}
-}
-
-/* confetti */
-.confetti{
- position:fixed;
- width:8px;
- height:8px;
- background:hsl(var(--h),100%,60%);
- animation:confettiFall 3s linear forwards;
-}
-@keyframes confettiFall{
- 0%{transform:translateY(-10vh);}
- 100%{transform:translateY(110vh);}
-}
-
-/* LOVE YOU sky */
-.skyText{
- position:fixed;
- top:30%;
- width:100%;
- text-align:center;
- font-size:80px;
- letter-spacing:10px;
- opacity:0;
- animation:fadeIn 2s forwards;
-}
-@keyframes fadeIn{
- to{opacity:1;}
-}
-
+/* 💘 FULLSCREEN YES */
 .fullscreenYes{
  position:fixed !important;
  top:0;
@@ -177,6 +124,16 @@ button{
  border-radius:0 !important;
  font-size:60px !important;
  z-index:9999;
+}
+
+/* 🐰🦊 POP ANIMATION */
+.pop{
+ animation:pop 1s ease forwards;
+}
+@keyframes pop{
+ 0%{transform:scale(0);opacity:0;}
+ 70%{transform:scale(1.2);opacity:1;}
+ 100%{transform:scale(1);}
 }
 
 </style>
@@ -195,7 +152,7 @@ button{
 
 <script>
 
-/* stars */
+/* 🌌 STARS */
 for(let i=0;i<200;i++){
  const star=document.createElement("div");
  star.className="star";
@@ -205,90 +162,44 @@ for(let i=0;i<200;i++){
  document.getElementById("stars").appendChild(star);
 }
 
-/* floating hearts */
+/* 💖 HEARTS */
 function createHeart(){
  const heart=document.createElement("div");
  heart.className="heart";
  heart.innerHTML="💖";
  heart.style.left=Math.random()*100+"vw";
  heart.style.animationDuration=(5+Math.random()*4)+"s";
+
+ heart.addEventListener("click",(e)=>{
+   explode(e.clientX,e.clientY);
+   heart.remove();
+ });
+
  document.body.appendChild(heart);
  setTimeout(()=>heart.remove(),9000);
 }
 setInterval(createHeart,600);
 
-/* explosion */
+/* 💥 EXPLOSION */
 function explode(x,y){
- for(let i=0;i<25;i++){
+ for(let i=0;i<30;i++){
   const spark=document.createElement("div");
   spark.className="spark";
   spark.style.left=x+"px";
   spark.style.top=y+"px";
   spark.style.background=`hsl(${Math.random()*360},100%,60%)`;
+
   const angle=Math.random()*2*Math.PI;
   const radius=60+Math.random()*100;
+
   spark.style.setProperty("--x",Math.cos(angle)*radius+"px");
   spark.style.setProperty("--y",Math.sin(angle)*radius+"px");
+
   document.body.appendChild(spark);
   setTimeout(()=>spark.remove(),1000);
  }
 }
 
-/* fireworks */
-function firework(){
- const rocket=document.createElement("div");
- rocket.className="rocket";
- document.body.appendChild(rocket);
-
- setTimeout(()=>{
-   rocket.remove();
-   const centerX = window.innerWidth/2;
-   const centerY = window.innerHeight*0.25;
-
-   for(let i=0;i<40;i++){
-     const heart=document.createElement("div");
-     heart.className="heartParticle";
-     heart.innerHTML="💖";
-     heart.style.left=centerX+"px";
-     heart.style.top=centerY+"px";
-     const angle=Math.random()*2*Math.PI;
-     const radius=80+Math.random()*150;
-     heart.style.setProperty("--x",Math.cos(angle)*radius+"px");
-     heart.style.setProperty("--y",Math.sin(angle)*radius+"px");
-     document.body.appendChild(heart);
-     setTimeout(()=>heart.remove(),1200);
-   }
- },1000);
-}
-
-/* many fireworks */
-function megaFireworks(){
- for(let i=0;i<6;i++){
-   setTimeout(firework,i*600);
- }
-}
-
-/* confetti storm */
-function confettiStorm(){
- for(let i=0;i<200;i++){
-   const c=document.createElement("div");
-   c.className="confetti";
-   c.style.left=Math.random()*100+"vw";
-   c.style.setProperty("--h",Math.random()*360);
-   document.body.appendChild(c);
-   setTimeout(()=>c.remove(),3000);
- }
-}
-
-/* LOVE YOU sky */
-function loveYouSky(){
- const t=document.createElement("div");
- t.className="skyText";
- t.innerText="LOVE YOU";
- document.body.appendChild(t);
-}
-
-/* buttons */
 const yesBtn=document.getElementById("yesBtn");
 const noBtn=document.getElementById("noBtn");
 const mainText=document.getElementById("mainText");
@@ -303,11 +214,16 @@ const messages=[
  "Think again 😢",
  "Last chance 😭",
  "Please? 💖",
- "Don’t break my heart 💘"
+ "Don’t break my heart 💘",
+ "I’ll be sad 🥲",
+ "Still no? 😔",
+ "One more try 😅",
+ "Okay… this is awkward 😭"
 ];
 
 noBtn.addEventListener("click",()=>{
  noClicks++;
+
  let scale = 1 - (noClicks * 0.1);
  if(scale < 0) scale = 0;
  noBtn.style.transform = `scale(${scale})`;
@@ -326,13 +242,8 @@ noBtn.addEventListener("click",()=>{
  }
 });
 
-/* YES CLICK FINALE */
+/* 💍 YES CLICK */
 yesBtn.addEventListener("click",()=>{
-
- megaFireworks();
- setTimeout(confettiStorm,800);
- setTimeout(loveYouSky,1500);
-
  const rect=yesBtn.getBoundingClientRect();
  explode(rect.left+rect.width/2,rect.top+rect.height/2);
 
@@ -342,12 +253,15 @@ yesBtn.addEventListener("click",()=>{
  Forever starts now 💞
  </p>
  <div style="font-size:90px;margin-top:20px;">💍</div>
- <div style="font-size:100px;margin-top:20px;">
+ <div class="pop" style="font-size:100px;margin-top:20px;">
    🐰💖🦊
  </div>
  `;
 });
 
 </script>
+
 </body>
+</html>
+
 </html>
