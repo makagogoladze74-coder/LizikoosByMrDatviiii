@@ -88,7 +88,7 @@ button{
  color:white;
 }
 
-/* 💖 BIG FLOATING HEARTS */
+/* 💖 BIG HEARTS */
 .heart{
  position:fixed;
  font-size:45px;
@@ -100,7 +100,7 @@ button{
  100%{transform:translateY(-10vh) scale(1.6);opacity:0;}
 }
 
-/* 💥 HEART EXPLOSION */
+/* 💥 EXPLOSION */
 .spark{
  position:fixed;
  width:6px;
@@ -124,6 +124,16 @@ button{
  border-radius:0 !important;
  font-size:60px !important;
  z-index:9999;
+}
+
+/* 🐰🦊 POP ANIMATION */
+.pop{
+ animation:pop 1s ease forwards;
+}
+@keyframes pop{
+ 0%{transform:scale(0);opacity:0;}
+ 70%{transform:scale(1.2);opacity:1;}
+ 100%{transform:scale(1);}
 }
 
 </style>
@@ -193,6 +203,7 @@ function explode(x,y){
 const yesBtn=document.getElementById("yesBtn");
 const noBtn=document.getElementById("noBtn");
 const mainText=document.getElementById("mainText");
+const card=document.getElementById("card");
 
 let yesScale=1;
 let noClicks=0;
@@ -210,7 +221,6 @@ const messages=[
  "Okay… this is awkward 😭"
 ];
 
-/* 📉 NO CLICK */
 noBtn.addEventListener("click",()=>{
  noClicks++;
 
@@ -222,7 +232,6 @@ noBtn.addEventListener("click",()=>{
    mainText.innerText = messages[noClicks-1];
  }
 
- /* 💘 YES GROWS */
  yesScale += 0.25;
 
  if(yesScale >= 3){
@@ -235,12 +244,18 @@ noBtn.addEventListener("click",()=>{
 
 /* 💍 YES CLICK */
 yesBtn.addEventListener("click",()=>{
- document.getElementById("card").innerHTML=`
+ const rect=yesBtn.getBoundingClientRect();
+ explode(rect.left+rect.width/2,rect.top+rect.height/2);
+
+ card.innerHTML=`
  <h1 style="font-size:42px;">Liziko 😍💖</h1>
  <p style="margin-top:20px;font-size:24px;">
  Forever starts now 💞
  </p>
  <div style="font-size:90px;margin-top:20px;">💍</div>
+ <div class="pop" style="font-size:100px;margin-top:20px;">
+   🐰💖🦊
+ </div>
  `;
 });
 
